@@ -57,7 +57,7 @@ const AddFarm = () => {
 
   if (url === "") {
     setUrl(
-      "https://cdn-icons.flaticon.com/png/512/2609/premium/2609404.png?token=exp=1655032178~hmac=cd259ddd4c6f40c07951246cb3572d50"
+      "https://cdn-icons.flaticon.com/png/512/4210/premium/4210903.png?token=exp=1655321234~hmac=0521243b5a6485e892b552da9197a260"
     );
   }
 
