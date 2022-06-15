@@ -1,23 +1,21 @@
-import {
-  StyleSheet,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
 import { Formik, Form, useField, Field } from "formik";
 import * as Yup from "yup";
 import { storage, db } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 import { Avatar, Button, Card, Text, TextInput } from "react-native-paper";
-import '../styles.css';
+import "../styles.css";
 import { useNavigation } from "@react-navigation/core";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 const AddFarm = () => {
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(null);
   const [url, setUrl] = useState(String);
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-  const navigation = useNavigation();
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const handleImageChange = (e: any) => {
     if (e.target.files[0]) {
       console.log(e.target.files[0]);
@@ -27,7 +25,7 @@ const AddFarm = () => {
 
   const addPic = () => {
     if (image == null) return;
-    const imageRef = ref(storage, "farmPic");
+    const imageRef = ref(storage, image.name);
     uploadBytes(imageRef, image)
       .then(() => {
         getDownloadURL(imageRef)
@@ -44,8 +42,8 @@ const AddFarm = () => {
   };
 
   const handleExit = () => {
-    navigation.replace("Farm")
-  }
+    navigation.replace("Farm");
+  };
 
   if (url === "") {
     setUrl(
@@ -67,7 +65,10 @@ const AddFarm = () => {
         validationSchema={Yup.object({
           displayname: Yup.string().required("**Required"),
           name: Yup.string().required("**Required"),
-          phone: Yup.string().matches(phoneRegExp, '**Phone number is not valid')
+          phone: Yup.string().matches(
+            phoneRegExp,
+            "**Phone number is not valid"
+          ),
         })}
         onSubmit={(values, { setSubmitting }) => {
           console.log(values);
@@ -79,23 +80,28 @@ const AddFarm = () => {
             phone: values.phone,
             farmPic: { url },
           });
-          navigation.replace("Farm")
+          navigation.replace("Farm");
         }}
       >
-        {({ errors, touched, handleChange, values, handleSubmit}) => (
+        {({ errors, touched, handleChange, values, handleSubmit }) => (
           <Form>
             <View style={styles.picture}>
-            <Avatar.Image size={200} source={{ uri: url }} />
+              <Avatar.Image size={200} source={{ uri: url }} />
             </View>
-            <input type="file" name="farmPic" onChange={handleImageChange} className="button"/>
-            <Button  mode="contained" onPress={addPic} style={styles.button}>
+            <input
+              type="file"
+              name="farmPic"
+              onChange={handleImageChange}
+              className="button"
+            />
+            <Button mode="contained" onPress={addPic} style={styles.button}>
               Upload
             </Button>
-            
+
             <TextInput
               label="Display Name"
               placeholder="Farm Display Name"
-              onChangeText={handleChange('displayname')}
+              onChangeText={handleChange("displayname")}
               value={values.displayname}
             />
 
@@ -104,7 +110,7 @@ const AddFarm = () => {
             <TextInput
               label="Name"
               placeholder="Farm name"
-              onChangeText={handleChange('name')}
+              onChangeText={handleChange("name")}
               value={values.name}
             />
 
@@ -113,7 +119,7 @@ const AddFarm = () => {
             <TextInput
               label="Phone"
               placeholder="567-100-1000"
-              onChangeText={handleChange('phone')}
+              onChangeText={handleChange("phone")}
               value={values.phone}
             />
 
@@ -122,13 +128,25 @@ const AddFarm = () => {
             <TextInput
               label="Open hours"
               placeholder="9:00-17:00"
-              onChangeText={handleChange('openHours')}
+              onChangeText={handleChange("openHours")}
               value={values.openHours}
             />
             <Text style={styles.span}>{errors.openHours}</Text>
             {/* <Button mode="contained" style={styles.buttonOutline}>Submit</Button> */}
-            <Button onPress={handleSubmit} mode="contained" style={styles.buttonOutline}>Submit</Button>
-            <Button onPress={handleExit} mode="contained" style={styles.buttonExit}>Exit</Button>
+            <Button
+              onPress={handleSubmit}
+              mode="contained"
+              style={styles.buttonOutline}
+            >
+              Submit
+            </Button>
+            <Button
+              onPress={handleExit}
+              mode="contained"
+              style={styles.buttonExit}
+            >
+              Exit
+            </Button>
           </Form>
         )}
       </Formik>
@@ -146,8 +164,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     // flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   picture: {
     width: "50%",
@@ -155,16 +173,16 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   input: {
     fontSize: 40,
   },
   buttonView: {
-      justifyContent: "center",
-      alignItems: "center",
-      width: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "50%",
   },
   button: {
     width: "100%",
@@ -174,7 +192,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     borderRadius: 5,
     padding: 5,
-    borderWidth: 2
+    borderWidth: 2,
   },
   buttonOutline: {
     backgroundColor: "green",
@@ -185,7 +203,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     borderRadius: 5,
     padding: 5,
-    borderWidth: 2
+    borderWidth: 2,
   },
   buttonExit: {
     backgroundColor: "grey",
@@ -196,18 +214,17 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     borderRadius: 5,
     padding: 5,
-    borderWidth: 2
+    borderWidth: 2,
   },
   buttonText: {
     fontSize: 30,
   },
   error: {
-      fontSize: 20,
+    fontSize: 20,
   },
   span: {
     color: "red",
     padding: 10,
     margin: "auto",
-  }
-  });
-  
+  },
+});
