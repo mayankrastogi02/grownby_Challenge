@@ -15,9 +15,10 @@ import AddFarm from "./NewFarm";
 import { Avatar, Button } from "react-native-paper";
 import { collection, getDocs } from "firebase/firestore";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Farm as farmType} from "../types";
 
 const Farm = () => {
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState<farmType[]>([]);
     const navigation = useNavigation<StackNavigationProp<any>>();
 
     useEffect(() => {
@@ -75,6 +76,7 @@ const Farm = () => {
                     {posts.length > 0 ? (
                         // console.log(posts)
                         posts.map((post) => {
+                            console.log(post);
                             return (
                                 // <div>{post.name}</div>);
                                 <View style={styles.card}>
@@ -84,6 +86,7 @@ const Farm = () => {
                                     >
                                         🌾 {post.name}
                                     </Text>
+                                    <Avatar.Image size={100} source={{ uri: post.farmPic.url }} />
                                 </View>
                             );
                         })

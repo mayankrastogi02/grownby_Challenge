@@ -12,8 +12,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 const AddFarm = () => {
   const [image, setImage] = useState(null);
-  const [url, setUrl] = useState(String);
-  const [imgurl, setFarmUrl] = useState(String);
+  const [imgurl, setUrl] = useState(String);
+  const [url, setFarmUrl] = useState(String);
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -55,7 +55,7 @@ const AddFarm = () => {
     navigation.replace("Farm");
   };
 
-  if (url === "") {
+  if (imgurl === "") {
     setUrl(
       "https://cdn-icons.flaticon.com/png/512/4210/premium/4210903.png?token=exp=1655321234~hmac=0521243b5a6485e892b552da9197a260"
     );
@@ -88,7 +88,7 @@ const AddFarm = () => {
             displayname: values.displayname,
             openHours: values.openHours,
             phone: values.phone,
-            farmPic: { imgurl },
+            farmPic: { url },
           });
           navigation.replace("Farm");
         }}
@@ -96,7 +96,7 @@ const AddFarm = () => {
         {({ errors, touched, handleChange, values, handleSubmit }) => (
           <Form>
             <View style={styles.picture}>
-              <Avatar.Image size={200} source={{ uri: url }} />
+              <Avatar.Image size={200} source={{ uri: imgurl }} />
             </View>
             <input
               type="file"
