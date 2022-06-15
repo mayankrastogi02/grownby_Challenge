@@ -13,13 +13,23 @@ import { StackNavigationProp } from "@react-navigation/stack";
 const AddFarm = () => {
   const [image, setImage] = useState(null);
   const [url, setUrl] = useState(String);
+  const [imgurl, setFarmUrl] = useState(String);
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const navigation = useNavigation<StackNavigationProp<any>>();
+
   const handleImageChange = (e: any) => {
+    const preview = document.querySelector('Avatar');
+  const reader = new FileReader();
+  reader.addEventListener("load", function () {
+    // convert image file to base64 string
+    setUrl(reader.result.toString());
+  }, false);
+
     if (e.target.files[0]) {
       console.log(e.target.files[0]);
       setImage(e.target.files[0]);
+      reader.readAsDataURL((e.target.files[0]));
     }
   };
 
@@ -30,7 +40,7 @@ const AddFarm = () => {
       .then(() => {
         getDownloadURL(imageRef)
           .then((url) => {
-            setUrl(url);
+            setFarmUrl(url);
           })
           .catch((error) => {
             console.log(error.message, "Error getting the image URL");
@@ -78,7 +88,7 @@ const AddFarm = () => {
             displayname: values.displayname,
             openHours: values.openHours,
             phone: values.phone,
-            farmPic: { url },
+            farmPic: { imgurl },
           });
           navigation.replace("Farm");
         }}
