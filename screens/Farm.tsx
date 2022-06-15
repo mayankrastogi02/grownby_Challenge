@@ -25,10 +25,13 @@ const Farm = () => {
         const colRef = collection(db, "FarmData");
         getDocs(colRef)
             .then((snapshot) => {
-                let farms = [];
+                let farms:farmType[] = [];
                 snapshot.docs.forEach((doc) => {
-                    farms.push({ ...doc.data(), id: doc.id });
+                    const data = doc.data() as farmType;
+                    farms.push({ ...data});
                 });
+                console.log(farms);
+                farms.sort((a, b) => a.name.localeCompare(b.name));
                 console.log(farms);
                 setPosts(farms);
             })
